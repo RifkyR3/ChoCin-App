@@ -38,7 +38,11 @@ export default defineConfig({
     plugins: [plugin()],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+            '@stores': fileURLToPath(new URL('./src/stores', import.meta.url)),
+            '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
+            '@layouts': fileURLToPath(new URL('./src/layouts', import.meta.url)),
+            '@views': fileURLToPath(new URL('./src/views', import.meta.url)),
         }
     },
     server: {
@@ -46,7 +50,11 @@ export default defineConfig({
             '^/weatherforecast': {
                 target,
                 secure: false
-            }
+            },
+            '/api': {
+                target,
+                secure: false
+            },
         },
         port: 5173,
         https: {
