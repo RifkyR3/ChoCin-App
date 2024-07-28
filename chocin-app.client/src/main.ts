@@ -6,14 +6,12 @@ import router from './routers'
 
 import App from './App.vue'
 
-// Vuetify
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
+import PrimeVue from 'primevue/config';
+import Aura from '@primevue/themes/aura';
+import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 
 // Font
-import { mdi } from 'vuetify/iconsets/mdi'
-import { aliases, fa } from 'vuetify/iconsets/fa-svg'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -30,27 +28,21 @@ app.use(pinia);
 
 app.use(router);
 
-app.component('font-awesome-icon', FontAwesomeIcon) // Register component globally
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('fas', FontAwesomeIcon) // Register component globally
 library.add(fas) // Include needed solid icons
 library.add(far) // Include needed regular icons
 
-const vuetify = createVuetify({
+app.use(PrimeVue, {
     theme: {
-        defaultTheme: 'dark',
-    },
-    components,
-    directives,
-    icons: {
-        defaultSet: 'fa',
-        aliases,
-        sets: {
-            fa,
-            mdi,
-        },
-    },
+        preset: Aura,
+        options: {
+            darkModeSelector: '.app-dark'
+        }
+    }
 });
-
-app.use(vuetify);
+app.use(ToastService);
+app.use(ConfirmationService);
 
 app.component('empty-layout', EmptyLayout);
 app.component('default-layout', DefaultLayout);
