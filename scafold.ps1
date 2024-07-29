@@ -1,0 +1,1 @@
+Scaffold-DbContext 'Name=DbContext' Npgsql.EntityFrameworkCore.PostgreSQL -d -f -Context "DefaultDbContext" -v -NoOnConfiguring -Project "ChoCin-App.Entities" -StartupProject "ChoCin-App.Server"

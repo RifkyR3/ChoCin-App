@@ -3,9 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoCin-App.Server", "ChoCin-App.Server\ChoCin-App.Server.csproj", "{D39865E4-C99D-44DE-B0CE-F9A6A5B02B59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChoCin-App.Server", "ChoCin-App.Server\ChoCin-App.Server.csproj", "{D39865E4-C99D-44DE-B0CE-F9A6A5B02B59}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "chocin-app.client", "chocin-app.client\chocin-app.client.esproj", "{2B218ACC-1450-4A2D-84EE-8533D1C16D88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoCin-App.Entities", "ChoCin-App.Entities\ChoCin-App.Entities.csproj", "{62ADD656-D014-4CF9-9581-C331BB92B213}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0A4887CF-A6E4-4EF7-845C-F508FF3A189D}"
+	ProjectSection(SolutionItems) = preProject
+		scafold.ps1 = scafold.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +30,10 @@ Global
 		{2B218ACC-1450-4A2D-84EE-8533D1C16D88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B218ACC-1450-4A2D-84EE-8533D1C16D88}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B218ACC-1450-4A2D-84EE-8533D1C16D88}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{62ADD656-D014-4CF9-9581-C331BB92B213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62ADD656-D014-4CF9-9581-C331BB92B213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62ADD656-D014-4CF9-9581-C331BB92B213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62ADD656-D014-4CF9-9581-C331BB92B213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

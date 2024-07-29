@@ -1,11 +1,14 @@
+using ChoCin_App.Server.Models;
+using ChoCin_App.Server;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var services = new ProgramServices(builder.Services);
+services.RegisterServices();
+services.RegisterDatabase(builder.Configuration.GetConnectionString("DbContext"));
+services.ConfigureServices();
 
 var app = builder.Build();
 
@@ -15,11 +18,17 @@ app.UseStaticFiles();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseOpenApi();
+    app.UseSwaggerUi();
+    app.UseReDoc(options =>
+    {
+        options.Path = "/redoc";
+    });
 }
 
 app.UseHttpsRedirection();
+
+//app.UseMiddleware<JwtMiddleware>();
 
 app.UseAuthorization();
 
