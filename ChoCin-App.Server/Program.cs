@@ -1,5 +1,6 @@
-using ChoCin_App.Server.Models;
 using ChoCin_App.Server;
+using ChoCin_App.Server.Helpers;
+using ChoCin_App.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseMiddleware<JwtMiddleware>();
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseAuthorization();
 

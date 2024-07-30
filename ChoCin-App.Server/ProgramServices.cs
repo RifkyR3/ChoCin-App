@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using ChoCin_App.Entities;
+using ChoCin_App.Server.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using NSwag.Generation.Processors.Security;
-using NSwag;
-using System.Net;
-using ChoCin_App.Entities;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using NSwag;
+using NSwag.Generation.Processors.Security;
+using System.Net;
 
 namespace ChoCin_App.Server
 {
@@ -19,10 +20,10 @@ namespace ChoCin_App.Server
 
         public void RegisterServices()
         {
-            //this._services.AddScoped<AuthService>();
-            //this._services.AddScoped<UserService>();
-            //this._services.AddScoped<GroupService>();
-            //this._services.AddScoped<ModuleService>();
+            this._services.AddScoped<AuthService>();
+            this._services.AddScoped<UserService>();
+            this._services.AddScoped<GroupService>();
+            this._services.AddScoped<ModuleService>();
         }
 
         public void RegisterDatabase(string? connectionString)
@@ -48,7 +49,7 @@ namespace ChoCin_App.Server
                     {
                         Version = "v1",
                         Title = "JWT Token Authentication API",
-                        Description = "ChoCin Web API"
+                        Description = "ChoCin-App API"
                     };
                 };
                 options.AddSecurity("Bearer", Enumerable.Empty<string>(), new OpenApiSecurityScheme

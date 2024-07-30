@@ -34,8 +34,4 @@
     <ProjectReference Include="..\ChoCin-App.Entities\ChoCin-App.Entities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

@@ -2,6 +2,7 @@ import './assets/main.scss'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import router from './routers'
 
 import App from './App.vue'
@@ -24,6 +25,7 @@ import EmptyLayout from '@layouts/EmptyLayout.vue';
 const app = createApp(App);
 
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 
 app.use(router);
