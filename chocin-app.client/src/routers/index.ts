@@ -28,6 +28,34 @@ const routes: Array<RouteRecordRaw> = [
             layout: 'empty'
         }
     },
+
+    {
+        path: '/denied',
+        name: 'Denied',
+        component: views.AccessView,
+        meta: {
+            requiresAuth: true,
+            layout: 'empty'
+        }
+    },
+    {
+        path: '/error',
+        name: 'Error',
+        component: views.ErrorView,
+        meta: {
+            requiresAuth: true,
+            layout: 'empty'
+        }
+    },
+    // otherwise redirect to error
+    {
+        path: '/:pathMatch(.*)*',
+        component: views.ErrorView,
+        meta: {
+            requiresAuth: true,
+            layout: 'empty'
+        }
+    }
 ];
 
 const router = createRouter({
