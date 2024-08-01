@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import * as views from '@/views';
+import { useAuthStore } from '@/stores';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -64,8 +65,31 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+    const auth = useAuthStore();
+    const logedin = auth.getAuthenticate();
+
+    if (to.meta.requiresAuth && !logedin) {
+        return next('/login');
+    }
+
+    if (logedin) {
+        if (auth.getRemeber()) {
+            const date = new Date();
+            const dateExpire = new Date(auth.getExpire());
+
+            if (date > dateExpire) {
+                auth.logout(false);
+                return next('/login')
+            }
+        }
+
+        if(to.meta.requiresUnauth) {
+            return next('/');
+        }
+    }
     
     return next();
+
 });
 
 export default router;

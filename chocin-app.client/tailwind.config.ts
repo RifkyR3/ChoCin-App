@@ -1,8 +1,8 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from 'tailwindcss'
+
 export default {
   darkMode: ['selector', '[class*="app-dark"]'],
     content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-    // eslint-disable-next-line no-undef
     plugins: [require('tailwindcss-primeui')],
     theme: {
         screens: {
@@ -13,5 +13,5 @@ export default {
             '2xl': '1920px'
         }
     }
-}
+} satisfies Config
 

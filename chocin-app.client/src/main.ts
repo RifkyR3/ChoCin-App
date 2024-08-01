@@ -17,6 +17,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 
 // Component
 import DefaultLayout from '@layouts/DefaultLayout.vue';
@@ -30,11 +31,6 @@ app.use(pinia);
 
 app.use(router);
 
-// eslint-disable-next-line vue/multi-word-component-names
-app.component('fas', FontAwesomeIcon) // Register component globally
-library.add(fas) // Include needed solid icons
-library.add(far) // Include needed regular icons
-
 app.use(PrimeVue, {
     theme: {
         preset: Aura,
@@ -45,6 +41,12 @@ app.use(PrimeVue, {
 });
 app.use(ToastService);
 app.use(ConfirmationService);
+
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('fas', FontAwesomeIcon) // Register component globally
+library.add(fas) // Include needed solid icons
+library.add(far) // Include needed regular icons
+library.add(fab) // Include needed brand icons
 
 app.component('empty-layout', EmptyLayout);
 app.component('default-layout', DefaultLayout);

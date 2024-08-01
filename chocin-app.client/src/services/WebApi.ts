@@ -20,7 +20,7 @@ export class ApiBase {
 
     protected transformOptions = (options: RequestInit): Promise<RequestInit> => {
         if (!this.setAuthTokenCall) {
-            this.authToken = useTokenStore().token;
+            this.authToken = useTokenStore().getToken();
         }
 
         if (this.authToken != '') {

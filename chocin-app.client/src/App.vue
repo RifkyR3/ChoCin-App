@@ -1,4 +1,5 @@
 <template>
+    <Toast/>
     <component :is='layout'>
         <router-view />
     </component>
