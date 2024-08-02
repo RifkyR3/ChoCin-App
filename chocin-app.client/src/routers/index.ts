@@ -2,6 +2,10 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import * as views from '@/views';
 import { useAuthStore } from '@/stores';
 
+// import { userRoutes } from './user.router';
+// import { groupRoutes } from './group.router';
+// import { moduleRoutes } from './module.router';
+
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
@@ -29,6 +33,10 @@ const routes: Array<RouteRecordRaw> = [
             layout: 'empty'
         }
     },
+
+    // ...userRoutes,
+    // ...groupRoutes,
+    // ...moduleRoutes,
 
     {
         path: '/denied',

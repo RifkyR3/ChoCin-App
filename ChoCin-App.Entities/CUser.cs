@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChoCin_App.Entities;
 
-[Table("c_user", Schema = "default")]
+[Table("c_user")]
 [Index("Username", Name = "c_user_pk_2", IsUnique = true)]
 public partial class CUser
 {

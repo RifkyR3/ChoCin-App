@@ -5,6 +5,7 @@ import { useAuthSessionStore } from './auth.session.store';
 import router from '@/routers';
 
 import { AuthService, type JwtAuthResponse } from '@/services/WebApi';
+import { useUiStore } from './ui.store';
 
 const authApi: AuthService = new AuthService();
 interface UserGroup {
@@ -72,6 +73,8 @@ export const useAuthStore = defineStore('auth', {
                     });
                     store.userGroup = group;
                 }
+
+                await useUiStore().setMenuModule(this.getUserGroupLogin().groupId);
             }
 
             return result;
@@ -106,13 +109,33 @@ export const useAuthStore = defineStore('auth', {
                 return storeLocal.authenticate;
             }
         },
-        getUserGroupLogin() {
+        getUserGroupsLogin() : UserGroup[] {
             const storeSession = useAuthSessionStore();
             const storeLocal = useAuthLocalStore();
             if (storeSession.authenticate && storeSession.token != '') {
                 return storeSession.userGroup;
             } else {
                 return storeLocal.userGroup;
+            }
+        },
+        getUserGroupLogin() : UserGroup {
+            const storeSession = useAuthSessionStore();
+            const storeLocal = useAuthLocalStore();
+            if (storeSession.authenticate && storeSession.token != '') {
+                return storeSession.userGroup[storeSession.userGroupSelected];
+            } else {
+                return storeLocal.userGroup[storeSession.userGroupSelected];
+            }
+        },
+        setUserGroupLogin(key:number) {
+            const storeSession = useAuthSessionStore();
+            const storeLocal = useAuthLocalStore();
+            if (storeSession.authenticate && storeSession.token != '') {
+                storeSession.userGroupSelected = key;
+                return storeSession.userGroup[storeSession.userGroupSelected];
+            } else {
+                storeSession.userGroupSelected = key
+                return storeLocal.userGroup[storeSession.userGroupSelected];
             }
         },
         getAuthenticate() {

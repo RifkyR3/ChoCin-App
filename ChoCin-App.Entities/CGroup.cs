@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChoCin_App.Entities;
 
-[Table("c_group", Schema = "default")]
+[Table("c_group")]
 public partial class CGroup
 {
     [Key]

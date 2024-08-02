@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChoCin_App.Entities;
 
-[Table("c_module", Schema = "default")]
+[Table("c_module")]
 public partial class CModule
 {
     [Key]

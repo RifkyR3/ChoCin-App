@@ -19,8 +19,6 @@ public partial class DefaultDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("English_Indonesia.1252");
-
         modelBuilder.Entity<CGroup>(entity =>
         {
             entity.HasKey(e => e.GroupId).HasName("c_group_pk");
@@ -41,7 +39,7 @@ public partial class DefaultDbContext : DbContext
                     j =>
                     {
                         j.HasKey("GroupId", "ModuleId").HasName("c_group_module_pk");
-                        j.ToTable("c_group_module", "default");
+                        j.ToTable("c_group_module");
                         j.IndexerProperty<Guid>("GroupId").HasColumnName("group_id");
                         j.IndexerProperty<Guid>("ModuleId").HasColumnName("module_id");
                     });
@@ -78,7 +76,7 @@ public partial class DefaultDbContext : DbContext
                     j =>
                     {
                         j.HasKey("UserId", "GroupId").HasName("c_user_group_pk");
-                        j.ToTable("c_user_group", "default");
+                        j.ToTable("c_user_group");
                         j.IndexerProperty<Guid>("UserId").HasColumnName("user_id");
                         j.IndexerProperty<Guid>("GroupId").HasColumnName("group_id");
                     });
