@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ModuleService } from '@/services/WebApi';
+import { ModuleService, type ModuleModel } from '@/services/WebApi';
 
 interface MenuItem {
     label: string,
@@ -24,34 +24,28 @@ export const useUiStore = defineStore('ui', {
             const resModule = await moduleApi.getModuleByGroup(groupId);
 
             if(resModule) {
-                const uiModule: MenuItem[] = [];
-
-                resModule.forEach(res => {
-                    const module: MenuItem = {
-                        label: res.name,
-                        icon: res.icon,
-                        to: res.path
-                    };
-
-                    if(res.children) {
-                        const uiSubModule:MenuItem[] = [];
-
-                        res.children.forEach(resChild => {
-                            uiSubModule.push({
-                                label: resChild.name,
-                                icon: resChild.icon,
-                                to: resChild.path
-                            });
-                        });
-
-                        module.items = uiSubModule;
-                    }
-                    
-                    uiModule.push(module);
-                });
-
-                this.menuItems = uiModule;
+                this.menuItems = this.parseModule(resModule);
             }
+        },
+        parseModule(modules:ModuleModel[]) {
+            const result:MenuItem[] = [];
+
+            modules.forEach(module => {
+                const item : MenuItem = {
+                    label: module.name,
+                    icon: module.icon,
+                    to: module.path
+                };
+                
+                if(module.children) {
+                    const child = this.parseModule(module.children);
+                    item.items = child;
+                }
+
+                result.push(item);
+            });
+
+            return result;
         }
     }
 });
