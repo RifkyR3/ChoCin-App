@@ -155,7 +155,7 @@ namespace ChoCin_App.Server.Services
 
         public async Task<List<ModuleModel>> GetModuleByGroup(Guid groupId)
         {
-            return await this.dbContext
+            List<ModuleModel> result = await this.dbContext
                 .CModules
                 .AsNoTracking()
                 .Where(W =>
@@ -170,19 +170,50 @@ namespace ChoCin_App.Server.Services
                     Icon = Q.ModuleIcon,
                     Path = Q.ModulePath,
                     Order = Q.ModuleOrder,
-                    Children = Q.InverseModuleSub
-                        .Where(Q => Q.Groups.Select(Q => Q.GroupId).Contains(groupId))
-                        .OrderBy(OC => OC.ModuleOrder)
-                        .Select(QC => new ModuleModel
-                        {
-                            Id = QC.ModuleId,
-                            Name = QC.ModuleName,
-                            Icon = QC.ModuleIcon,
-                            Path = QC.ModulePath,
-                            Order = QC.ModuleOrder,
-                        }).ToList()
+                    SubId = Q.ModuleSubId
                 })
                 .ToListAsync();
+
+            foreach (var module in result)
+            {
+                var child = await this.GetChildModule(module.Id);
+                if (child != null && child.Count() > 0)
+                {
+                    module.Children = child;
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<List<ModuleModel>> GetChildModule(Guid moduleId)
+        {
+            List<ModuleModel> result = await this.dbContext
+                .CModules
+                .AsNoTracking()
+                .Where(W => W.ModuleSubId == moduleId)
+                .OrderBy(O => O.ModuleOrder)
+                .Select(Q => new ModuleModel
+                {
+                    Id = Q.ModuleId,
+                    Name = Q.ModuleName,
+                    Icon = Q.ModuleIcon,
+                    Path = Q.ModulePath,
+                    Order = Q.ModuleOrder,
+                    SubId = Q.ModuleSubId,
+                })
+                .ToListAsync();
+
+            foreach (var module in result)
+            {
+                var child = await this.GetChildModule(module.Id);
+                if (child != null && child.Count() > 0)
+                {
+                    module.Children = child;
+                }
+            }
+
+            return result;
         }
 
         public async Task<List<DropDownModel>> GetComboMainModule()
@@ -202,10 +233,10 @@ namespace ChoCin_App.Server.Services
 
         public async Task<List<ModuleModel>> GetModuleTree()
         {
-            return await this.dbContext
+            List<ModuleModel> result = await this.dbContext
                 .CModules
-                .Where(W => W.ModuleSub == null)
                 .AsNoTracking()
+                .Where(W => W.ModuleSubId == null)
                 .OrderBy(O => O.ModuleOrder)
                 .Select(Q => new ModuleModel
                 {
@@ -214,19 +245,20 @@ namespace ChoCin_App.Server.Services
                     Icon = Q.ModuleIcon,
                     Path = Q.ModulePath,
                     Order = Q.ModuleOrder,
-                    SubId = Q.ModuleSubId,
-                    Children = Q.InverseModuleSub
-                        .OrderBy(OC => OC.ModuleOrder)
-                        .Select(QC => new ModuleModel
-                        {
-                            Id = QC.ModuleId,
-                            Name = QC.ModuleName,
-                            Icon = QC.ModuleIcon,
-                            Path = QC.ModulePath,
-                            SubId = QC.ModuleSubId
-                        }).ToList()
+                    SubId = Q.ModuleSubId
                 })
                 .ToListAsync();
+
+            foreach (var module in result)
+            {
+                var child = await this.GetChildModule(module.Id);
+                if (child != null && child.Count() > 0)
+                {
+                    module.Children = child;
+                }
+            }
+
+            return result;
         }
     }
 }

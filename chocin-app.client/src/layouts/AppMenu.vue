@@ -1,6 +1,4 @@
 <script setup>
-import { ref } from 'vue';
-
 import AppMenuItem from './AppMenuItem.vue';
 import { useUiStore } from '@/stores';
 

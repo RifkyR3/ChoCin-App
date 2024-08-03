@@ -36,8 +36,8 @@ export const useUiStore = defineStore('ui', {
                     icon: module.icon,
                     to: module.path
                 };
-                
-                if(module.children) {
+
+                if (module.children && module.children.length > 0) {
                     const child = this.parseModule(module.children);
                     item.items = child;
                 }

@@ -1,5 +1,4 @@
 <template>
-    <FloatingConfigurator />
     <div
         class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
         <div class="flex flex-col items-center justify-center">
@@ -65,7 +64,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAuthStore } from '@/stores';
-import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 
 interface Data {
     username: string,
@@ -84,7 +82,6 @@ export default defineComponent({
         }
     },
     components:{
-        FloatingConfigurator
     },
     methods: {
         async onSubmit() {
