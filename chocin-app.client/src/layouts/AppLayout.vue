@@ -4,6 +4,7 @@ import { computed, ref, watch } from 'vue';
 import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
+import { useUiStore } from '@/stores';
 
 const { layoutConfig, layoutState, isSidebarActive, resetMenu } = useLayout();
 
@@ -55,6 +56,7 @@ const isOutsideClicked = (event) => {
         <app-topbar></app-topbar>
         <app-sidebar></app-sidebar>
         <div class="layout-main-container">
+            <ProgressBar v-if="useUiStore().onProgress" mode="indeterminate" style="height: 6px"></ProgressBar>
             <div class="layout-main">
                 <router-view></router-view>
             </div>

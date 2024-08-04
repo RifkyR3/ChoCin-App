@@ -4,14 +4,11 @@ import { useAuthSessionStore } from './auth.session.store';
 
 import router from '@/routers';
 
+import type UserGroup from "@/commons/IUserGroup";
 import { AuthService, type JwtAuthResponse } from '@/services/WebApi';
 import { useUiStore } from './ui.store';
 
 const authApi: AuthService = new AuthService();
-interface UserGroup {
-    groupId: string;
-    groupName: string;
-}
 
 export const useAuthStore = defineStore('auth', {
     actions: {

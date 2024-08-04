@@ -1,19 +1,15 @@
 import { defineStore } from 'pinia';
 import { ModuleService, type ModuleModel } from '@/services/WebApi';
-
-interface MenuItem {
-    label: string,
-    icon?: string,
-    to?: string,
-    items?: MenuItem[]
-}
+import type { MenuItem } from 'primevue/menuitem';
 
 const moduleApi: ModuleService = new ModuleService();
 
 export const useUiStore = defineStore('ui', {
     state: () => {
         return {
-            menuItems: [] as MenuItem[]
+            menuItems: [] as MenuItem[],
+            isDarkMode: false,
+            onProgress: false
         }
     },
     persist: {
@@ -46,6 +42,13 @@ export const useUiStore = defineStore('ui', {
             });
 
             return result;
+        },
+        setProgress(value?:boolean) {
+            if(value) {
+                this.onProgress = value
+            }
+
+            this.onProgress != this.onProgress
         }
     }
 });

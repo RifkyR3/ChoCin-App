@@ -1,3 +1,4 @@
+import { useUiStore } from '@/stores';
 import { computed, reactive, readonly } from 'vue';
 
 const layoutConfig = reactive({
@@ -51,6 +52,7 @@ export function useLayout() {
 
     const executeDarkModeToggle = () => {
         layoutConfig.darkTheme = !layoutConfig.darkTheme;
+        useUiStore().isDarkMode = layoutConfig.darkTheme;
         document.documentElement.classList.toggle('app-dark');
     };
 

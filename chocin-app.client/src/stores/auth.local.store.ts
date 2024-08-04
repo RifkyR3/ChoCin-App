@@ -1,9 +1,5 @@
+import type UserGroup from "@/commons/IUserGroup";
 import { defineStore } from "pinia";
-
-interface UserGroup {
-    groupId: string;
-    groupName: string;
-}
 
 export const useAuthLocalStore = defineStore('authLocal', {
     state: () => {

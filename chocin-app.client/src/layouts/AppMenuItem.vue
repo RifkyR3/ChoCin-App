@@ -63,7 +63,11 @@ const itemClick = (event, item) => {
 };
 
 const checkActiveRoute = (item) => {
-    return route.path === item.to;
+    const isChild = route.matched.map((item) => {
+        return item.path;
+    }).includes(item.to);
+
+    return route.path === item.to || isChild ;
 };
 </script>
 
