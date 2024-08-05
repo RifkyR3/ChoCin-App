@@ -3,25 +3,26 @@
         <form @submit.prevent="onSubmit">
             <div class="flex flex-col gap-2 mb-3">
                 <label for="name1">Name</label>
-                <InputText id="name1" type="text" required :disabled="progress" />
+                <InputText v-model="dataInput.groupName" id="name1" type="text" required :disabled="progress" />
             </div>
 
             <div class="flex flex-col gap-2 mb-3">
                 <label for="module">Modules</label>
-                <TreeSelect v-model:modelValue="checkbox" :options="moduleTree" selectionMode="checkbox" placeholder="Select Item" class="md:w-80 w-full" />
+                <TreeSelect id="module" v-model:modelValue="checkbox" :options="moduleTree" selectionMode="checkbox"
+                    placeholder="Select Item" class="w-full" display="chip" :disabled="progress"/>
             </div>
 
             <Button type="submit" label="Submit" :fluid="false" icon="pi pi-check"></Button>
             &nbsp;
-            <Button label="Cancel" :fluid="false" severity="danger" icon="pi pi-times"></Button>
+            <Button label="Cancel" :fluid="false" severity="danger" icon="pi pi-times" v-on:click="btnBack"></Button>
         </form>
     </div>
 </template>
 <script lang="ts">
-import type { GroupInput, GroupModel, ModuleModel } from '@/services/WebApi';
+import { ToastLife } from '@/commons/Const';
+import type { GroupInput, GroupModel } from '@/services/WebApi';
 import { GroupService, ModuleService } from '@/services/WebApi';
-import { useUiStore } from '@/stores';
-import type { TreeSelectionKeys } from 'primevue/tree';
+import type { TreeExpandedKeys } from 'primevue/tree';
 import type { TreeNode } from 'primevue/treenode';
 import { defineComponent } from 'vue';
 
@@ -36,7 +37,7 @@ interface Data {
     inputResult: boolean,
     progress: boolean,
     moduleName: string,
-    checkbox:TreeSelectionKeys
+    checkbox: TreeExpandedKeys
 }
 
 export default defineComponent({
@@ -52,7 +53,7 @@ export default defineComponent({
             inputResult: false,
             progress: false,
             moduleName: '',
-            checkbox:{}
+            checkbox: {}
         }
     },
     components: {
@@ -72,23 +73,18 @@ export default defineComponent({
     },
     methods: {
         async onSubmit() {
-            const useUi = useUiStore();
+            const checked = Object.keys(this.checkbox);
+            this.dataInput.moduleIds = checked;
 
-            useUi.setProgress();
+            if (this.dataId) {
+                await this.doUpdate(this.dataId)
+            } else {
+                await this.doAdd();
+            }
 
-            // if (this.dataId) {
-            //     await this.doUpdate(this.dataId)
-            // } else {
-            //     await this.doAdd();
-            // }
-            console.log(this.checkbox.values);
-
-
-            // if (this.inputResult) {
-            //     this.$router.push('/groups/');
-            // }
-
-            useUi.setProgress();
+            if (this.inputResult) {
+                this.$router.push('/groups/');
+            }
         },
         async doAdd() {
             try {
@@ -97,14 +93,16 @@ export default defineComponent({
                 this.$toast.add({
                     severity: "success",
                     summary: this.moduleName,
-                    detail: "Successfully to add Group"
+                    detail: "Successfully to add Group",
+                    life: ToastLife
                 });
                 this.inputResult = true;
             } catch (e) {
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
-                    detail: "Failed to add Group"
+                    detail: "Failed to add Group",
+                    life: ToastLife
                 });
                 this.inputResult = false;
             }
@@ -116,7 +114,8 @@ export default defineComponent({
                 this.$toast.add({
                     severity: "success",
                     summary: this.moduleName,
-                    detail: "Successfully to update Group"
+                    detail: "Successfully to update Group",
+                    life: ToastLife
                 });
                 this.inputResult = true;
                 this.inputResult = true;
@@ -124,16 +123,13 @@ export default defineComponent({
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
-                    detail: "Failed to update Group"
+                    detail: "Failed to update Group",
+                    life: ToastLife
                 });
                 this.inputResult = false;
             }
         },
         async getGroupById(id: string) {
-            const useUi = useUiStore();
-
-            useUi.setProgress();
-
             try {
                 this.data = await groupApi.getGroupById(id);
 
@@ -142,15 +138,50 @@ export default defineComponent({
                     moduleIds: this.data.groupModuleIds
                 }
 
+                if (this.data.groupModuleIds && this.data.groupModuleIds.length > 0) {
+                    this.moduleTree.forEach(mod => {
+                        let partialChecked = false;
+                        let partialCheckedNum = 0;
+                        let childNum = 0;
+                        const check = this.data?.groupModuleIds?.includes(mod.key);
+
+                        if (mod.children && mod.children.length > 0) {
+                            mod.children?.forEach(child => {
+                                const childCheck = this.data?.groupModuleIds?.includes(child.key);
+                                childNum++;
+
+                                if (childCheck) {
+                                    partialChecked = true;
+                                    partialCheckedNum++;
+
+                                    this.checkbox[child.key] = {
+                                        checked: childCheck,
+                                        partialChecked: false
+                                    }
+                                }
+                            });
+                        }
+
+                        if (check || partialChecked) {
+                            const partialVal = partialChecked && (partialCheckedNum == childNum);
+                            const checkedVal = childNum > 0 ? partialChecked : (partialVal || check)
+                            this.checkbox[mod.key] = {
+                                checked: checkedVal ,
+                                partialChecked: partialChecked
+                            }
+                        }
+                    });
+                }
+
+
             } catch (e) {
+                // console.log(e)
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
                     detail: "Failed to get Group data"
                 });
             }
-
-            useUi.setProgress();
         },
         btnBack() {
             this.$router.push('/groups');

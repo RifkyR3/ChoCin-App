@@ -24,7 +24,8 @@ namespace ChoCin_App.Server.Services
                 .Select(Q => new GroupModel
                 {
                     GroupId = Q.GroupId,
-                    GroupName = Q.GroupName
+                    GroupName = Q.GroupName,
+                    GroupModuleIds = Q.Modules.Select(QM => QM.ModuleId).ToList()
                 })
                 .ToListAsync();
         }
@@ -106,13 +107,18 @@ namespace ChoCin_App.Server.Services
         {
             var group = await this.dbContext
                 .CGroups
-                .AsNoTracking()
+                .Include (G => G.Modules)
                 .Where(q => q.GroupId == id)
                 .FirstOrDefaultAsync();
 
             if (group != null)
             {
-                this.dbContext.Remove(group);
+                if (group.Modules?.Count > 0)
+                {
+                    group.Modules.Clear();
+                }
+
+                this.dbContext.CGroups.Remove(group);
                 var result = await dbContext.SaveChangesAsync();
                 return result >= 0;
             }

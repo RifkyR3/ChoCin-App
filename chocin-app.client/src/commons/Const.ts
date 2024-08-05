@@ -1,0 +1,1 @@
+export const ToastLife: number = 3000;

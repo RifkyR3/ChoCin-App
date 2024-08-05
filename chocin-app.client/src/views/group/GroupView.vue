@@ -8,8 +8,13 @@
 
         </Toolbar>
 
-        <DataTable :value="datas" tableStyle="min-width: 50rem">
+        <DataTable :value="datas" stripedRows tableStyle="min-width: 50rem">
             <Column field="groupName" header="Name"></Column>
+            <Column header="Module">
+                <template #body="slotProps">
+                    {{ slotProps.data.groupModuleIds?.length }}
+                </template>
+            </Column>
             <Column :exportable="false" style="width: 20%">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2"
@@ -32,6 +37,7 @@
     </Dialog>
 </template>
 <script lang="ts">
+import { ToastLife } from '@/commons/Const';
 import { GroupService, type GroupModel } from '@/services/WebApi';
 import { defineComponent } from 'vue';
 
@@ -40,19 +46,25 @@ const api: GroupService = new GroupService();
 interface Data {
     datas: GroupModel[],
     data: GroupModel | null,
-    deleteDialog: boolean
+    deleteDialog: boolean,
+    moduleName: string
 }
 export default defineComponent({
     data(): Data {
         return {
             datas: [],
             data: null,
-            deleteDialog: false
+            deleteDialog: false,
+            moduleName: 'Group List'
         }
     },
     components: {
     },
     created() {
+        if (this.$route.name) {
+            this.moduleName = this.$route.name.toString();
+        }
+
         // fetch the data when the view is created and the data is
         // already being observed
         this.fetch();
@@ -73,19 +85,30 @@ export default defineComponent({
             this.deleteDialog = true;
         },
         async btnDeleteConfirm() {
-            if (this.data) {
-                await api.deleteGroup(this.data.groupId);
+            try {
+                if (this.data) {
+                    await api.deleteGroup(this.data.groupId);
+                }
+
+                await this.fetch();
+
+                this.$toast.add({
+                    severity: 'success',
+                    summary: this.moduleName,
+                    detail: 'Group Deleted',
+                    life: ToastLife
+                });
+            } catch(e) {
+                this.$toast.add({
+                    severity: "warn",
+                    summary: this.moduleName,
+                    detail: "Failed to Delete Group. This Group Already Used.",
+                    life: ToastLife
+                });
             }
 
-            await this.fetch();
-
             this.deleteDialog = false;
-            this.$toast.add({
-                severity: 'success',
-                summary: 'Successful',
-                detail: 'Products Deleted',
-                life: 3000
-            });
+            
         }
     },
 })

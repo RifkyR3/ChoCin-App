@@ -50,26 +50,31 @@ export default defineComponent({
     },
     methods: {
         checkRouter() {
-            const nameRoute = this.$route.name;
-            this.title = nameRoute ? nameRoute.toString() : 'Index';
+            // const nameRoute = this.$route.name;
+            // this.title = nameRoute ? nameRoute.toString() : 'Index';
 
             const curRoute = this.$route.matched;
             this.breadItem = [];
 
             for (const [key, value] of Object.entries(curRoute)) {
-                if (parseInt(key) != 0) {
-                let currUrl = '#';
+                if (value.name) {
+                    this.title = value.name.toString();
 
-                if ((curRoute.length - 1) > parseInt(key)) {
-                    currUrl = value.path
+                    if (parseInt(key) != 0) {
+                        let currUrl = '#';
+
+                        if ((curRoute.length - 1) > parseInt(key)) {
+                            currUrl = value.path
+                        }
+
+                        const _item: MenuItem = {
+                            label: value.name.toString(),
+                            route: currUrl
+                        };
+                        this.breadItem.push(_item);
+                    }
                 }
 
-                const _item: MenuItem = {
-                    label: value.name?.toString(),
-                    route: currUrl
-                };
-                this.breadItem.push(_item);
-                }
             }
         }
     }

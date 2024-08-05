@@ -16,9 +16,11 @@ export const groupRoutes: Array<RouteRecordRaw> = [
             {
                 path: '',
                 name: 'Groups',
-                children:[
+                // component: views.GroupView,
+                children: [
                     {
                         path: '',
+                        // name: 'Groups',
                         component: views.GroupView
                     },
                     {

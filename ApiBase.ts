@@ -1,4 +1,4 @@
-import { useTokenStore } from "@/stores";
+import { useTokenStore, useUiStore } from "@/stores";
 
 export class ApiBase {
     private authToken: string = '';
@@ -20,6 +20,8 @@ export class ApiBase {
                 Authorization: this.authToken,
             };
         }
+
+        useUiStore().onProgress = true;
         return Promise.resolve(options);
     };
 
@@ -28,6 +30,8 @@ export class ApiBase {
         // or call processor function to run the default processing logic
 
         // console.log("Service call: " + url);
+
+        useUiStore().onProgress = false;
         return processor(response); 
     }
 }
