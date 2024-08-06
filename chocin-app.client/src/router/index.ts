@@ -24,15 +24,6 @@ const routes: Array<RouteRecordRaw> = [
             layout: 'empty'
         }
     },
-    {
-        path: '/logout',
-        name: 'Logout',
-        component: views.LogoutView,
-        meta: {
-            requiresAuth: true,
-            layout: 'empty'
-        }
-    },
 
     ...userRoutes,
     ...groupRoutes,

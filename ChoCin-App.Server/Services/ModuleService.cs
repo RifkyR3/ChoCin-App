@@ -123,7 +123,7 @@ namespace ChoCin_App.Server.Services
 
                     if (subModule != null)
                     {
-                        update.ModuleSub = subModule;
+                        update.ModuleSubId = subModule.ModuleId;
                     }
                 }
 

@@ -1,5 +1,5 @@
 <template>
-    <div className="card">
+    <div class="card">
         <form @submit.prevent="onSubmit">
             <div class="flex flex-col gap-2 mb-3">
                 <label for="name1">Name</label>

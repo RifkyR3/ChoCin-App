@@ -43,7 +43,8 @@ watch(
         isActiveMenu.value = newVal === itemKey.value || newVal.startsWith(itemKey.value + '-');
     }
 );
-const itemClick = (event, item) => {
+
+function itemClick(event, item) {
     if (item.disabled) {
         event.preventDefault();
         return;
@@ -60,15 +61,11 @@ const itemClick = (event, item) => {
     const foundItemKey = item.items ? (isActiveMenu.value ? props.parentItemKey : itemKey) : itemKey.value;
 
     setActiveMenuItem(foundItemKey);
-};
+}
 
-const checkActiveRoute = (item) => {
-    const isChild = route.matched.map((item) => {
-        return item.path;
-    }).includes(item.to);
-
-    return route.path === item.to || isChild ;
-};
+function checkActiveRoute(item) {
+    return route.path === item.to;
+}
 </script>
 
 <template>

@@ -1,8 +1,16 @@
 <script setup>
+import { ref } from 'vue';
 import { useLayout } from '@/layouts/composables/layout';
 import AppConfigurator from './AppConfigurator.vue';
+import FloatingUser from '@/components/FloatingUser.vue';
 
 const { onMenuToggle, toggleDarkMode, isDarkTheme } = useLayout();
+
+const profile = ref(null);
+
+function toggleProfile(event) {
+    profile.value.toggle(event);
+}
 </script>
 
 <template>
@@ -60,18 +68,13 @@ const { onMenuToggle, toggleDarkMode, isDarkTheme } = useLayout();
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-calendar"></i>
-                        <span>Calendar</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
+                    <button type="button" class="layout-topbar-action" @click="toggleProfile">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>
                     </button>
+                    <Popover ref="profile" id="overlay_panel">
+                        <FloatingUser></FloatingUser>
+                    </Popover>
                 </div>
             </div>
         </div>

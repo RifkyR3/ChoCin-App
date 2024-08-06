@@ -1,5 +1,5 @@
 <template>
-    <div className="card">
+    <div class="card">
         <Toolbar class="mb-6">
             <template #start>
                 <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" as="router-link"
