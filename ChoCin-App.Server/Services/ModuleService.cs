@@ -139,12 +139,16 @@ namespace ChoCin_App.Server.Services
         {
             var module = await this.dbContext
                 .CModules
-                .AsNoTracking()
+                .Include(Q => Q.Groups)
                 .Where(q => q.ModuleId == id)
                 .FirstOrDefaultAsync();
 
             if (module != null)
             {
+                if(module.Groups.Count > 0) {
+                    module.Groups.Clear();
+                }
+                
                 this.dbContext.CModules.Remove(module);
                 var result = await dbContext.SaveChangesAsync();
                 return result >= 0;
