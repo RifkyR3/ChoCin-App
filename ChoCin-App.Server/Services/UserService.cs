@@ -119,12 +119,15 @@ namespace ChoCin_App.Server.Services
         {
             var user = await this.dbContext
                 .CUsers
-                .AsNoTracking()
+                .Include(Q => Q.Groups)
                 .Where(q => q.UserId == id)
                 .FirstOrDefaultAsync();
 
             if (user != null)
             {
+                if(user.Groups?.Count > 0) {
+                    user.Groups.Clear();
+                }
                 this.dbContext.CUsers.Remove(user);
                 var result = await dbContext.SaveChangesAsync();
                 return result >= 0;

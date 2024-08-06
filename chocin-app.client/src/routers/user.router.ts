@@ -1,34 +1,33 @@
-// import { type RouteRecordRaw } from 'vue-router';
-// import * as views from '@/views';
-// import IndexRouteView from '@components/IndexRouteView.vue';
+import { type RouteRecordRaw } from 'vue-router';
+import * as views from '@/views';
+import IndexRouteView from '@components/IndexRouteView.vue';
 
-// const mainUrl = '/users';
+const mainUrl = '/users';
 
-// export const userRoutes: Array<RouteRecordRaw> = [
-//     {
-//         path: mainUrl,
-//         name: 'Index Users',
-//         component: IndexRouteView,
-//         meta: {
-//             requiresAuth: true
-//         },
-//         children: [
-//             {
-//                 path: '',
-//                 name: 'User List',
-//                 component: views.UserView,
-//                 meta: {
-//                     requiresAuth: true
-//                 }
-//             },
-//             {
-//                 path: 'input/:userId?',
-//                 name: 'User Input',
-//                 component: views.UserInput,
-//                 meta: {
-//                     requiresAuth: true
-//                 }
-//             },
-//         ]
-//     },
-// ]
+export const userRoutes: Array<RouteRecordRaw> = [
+    {
+        path: mainUrl,
+        name: 'Users',
+        component: IndexRouteView,
+        meta: {
+            requiresAuth: true
+        },
+        children: [
+            {
+                path: '',
+                name: 'Users',
+                children:[
+                    {
+                        path: '',
+                        component: views.UserView,
+                    },
+                    {
+                        path: 'input/:userId?',
+                        name: 'User Input',
+                        component: views.UserInput,
+                    },
+                ]
+            }
+        ]
+    },
+]

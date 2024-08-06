@@ -5,3 +5,4 @@ export { default as LogoutView } from './LogoutView.vue';
 export { default as DashboardView } from './DashboardView.vue';
 
 export * from './group/index';
+export * from './user/index';

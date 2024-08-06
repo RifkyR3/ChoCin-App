@@ -2,7 +2,7 @@ import { createRouter, createWebHistory,createMemoryHistory, type RouteRecordRaw
 import * as views from '@/views';
 import { useAuthStore } from '@/stores';
 
-// import { userRoutes } from './user.router';
+import { userRoutes } from './user.router';
 import { groupRoutes } from './group.router';
 // import { moduleRoutes } from './module.router';
 
@@ -34,7 +34,7 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
 
-    // ...userRoutes,
+    ...userRoutes,
     ...groupRoutes,
     // ...moduleRoutes,
 
