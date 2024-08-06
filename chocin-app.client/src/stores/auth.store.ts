@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useAuthLocalStore } from './auth.local.store';
 import { useAuthSessionStore } from './auth.session.store';
 
-import router from '@/routers';
+import router from '@/router';
 
 import type UserGroup from "@/commons/IUserGroup";
 import { AuthService, type JwtAuthResponse } from '@/services/WebApi';

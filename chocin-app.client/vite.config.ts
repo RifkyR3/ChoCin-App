@@ -1,7 +1,8 @@
 import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
-import plugin from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools'
 import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
@@ -42,7 +43,8 @@ export default defineConfig({
         noDiscovery: true
     },
     plugins: [
-        plugin(),
+        vue(),
+        vueDevTools(),
         Components({
             resolvers: [PrimeVueResolver()]
         })
