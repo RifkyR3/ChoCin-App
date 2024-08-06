@@ -16,15 +16,16 @@ declare module 'vue' {
     FloatingConfigurator: typeof import('./src/components/FloatingConfigurator.vue')['default']
     IndexRouteView: typeof import('./src/components/IndexRouteView.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
+    ListIcon: typeof import('./src/components/ListIcon.vue')['default']
     MultiSelect: typeof import('primevue/multiselect')['default']
     Password: typeof import('primevue/password')['default']
     ProgressBar: typeof import('primevue/progressbar')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Select: typeof import('primevue/select')['default']
     SelectButton: typeof import('primevue/selectbutton')['default']
     Toast: typeof import('primevue/toast')['default']
     Toolbar: typeof import('primevue/toolbar')['default']
-    Tree: typeof import('primevue/tree')['default']
     TreeSelect: typeof import('primevue/treeselect')['default']
   }
   export interface ComponentCustomProperties {

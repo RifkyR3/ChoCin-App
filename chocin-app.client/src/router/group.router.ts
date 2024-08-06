@@ -15,18 +15,13 @@ export const groupRoutes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '',
-                name: 'Groups',
-                children: [
-                    {
-                        path: '',
-                        component: views.GroupView
-                    },
-                    {
-                        path: 'input/:groupId?',
-                        name: 'Group Input',
-                        component: views.GroupInput
-                    }
-                ]
+                name: 'Group List',
+                component: views.GroupView
+            },
+            {
+                path: 'input/:groupId?',
+                name: 'Group Input',
+                component: views.GroupInput
             }
         ]
     }

@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores';
 
 import { userRoutes } from './user.router';
 import { groupRoutes } from './group.router';
-// import { moduleRoutes } from './module.router';
+import { moduleRoutes } from './module.router';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -36,7 +36,7 @@ const routes: Array<RouteRecordRaw> = [
 
     ...userRoutes,
     ...groupRoutes,
-    // ...moduleRoutes,
+    ...moduleRoutes,
 
     {
         path: '/denied',
@@ -68,7 +68,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createMemoryHistory(),
     routes
 });
 

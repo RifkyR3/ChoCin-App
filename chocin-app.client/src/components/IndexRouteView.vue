@@ -60,7 +60,7 @@ export default defineComponent({
                 if (value.name) {
                     this.title = value.name.toString();
 
-                    if (parseInt(key) != 0) {
+                    // if (parseInt(key) != 0) {
                         let currUrl = '#';
 
                         if ((curRoute.length - 1) > parseInt(key)) {
@@ -72,7 +72,7 @@ export default defineComponent({
                             route: currUrl
                         };
                         this.breadItem.push(_item);
-                    }
+                    // }
                 }
 
             }

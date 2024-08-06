@@ -15,19 +15,14 @@ export const userRoutes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '',
-                name: 'Users',
-                children:[
-                    {
-                        path: '',
-                        component: views.UserView,
-                    },
-                    {
-                        path: 'input/:userId?',
-                        name: 'User Input',
-                        component: views.UserInput,
-                    },
-                ]
-            }
+                name: 'User List',
+                component: views.UserView,
+            },
+            {
+                path: 'input/:userId?',
+                name: 'User Input',
+                component: views.UserInput,
+            },
         ]
     },
 ]

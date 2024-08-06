@@ -6,3 +6,4 @@ export { default as DashboardView } from './DashboardView.vue';
 
 export * from './group/index';
 export * from './user/index';
+export * from './module/index';
