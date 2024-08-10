@@ -2,7 +2,7 @@ import { useUiStore } from '@/stores';
 import { computed, reactive, readonly } from 'vue';
 
 const layoutConfig = reactive({
-    preset: 'Aura',
+    preset: 'Lara',
     primary: 'emerald',
     surface: null,
     darkTheme: false,
