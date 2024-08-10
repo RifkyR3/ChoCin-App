@@ -146,9 +146,10 @@ export default defineComponent({
                         const check = this.data?.groupModuleIds?.includes(mod.key);
 
                         if (mod.children && mod.children.length > 0) {
+                            childNum = mod.children.length;
+
                             mod.children?.forEach(child => {
                                 const childCheck = this.data?.groupModuleIds?.includes(child.key);
-                                childNum++;
 
                                 if (childCheck) {
                                     partialChecked = true;
@@ -163,11 +164,11 @@ export default defineComponent({
                         }
 
                         if (check || partialChecked) {
-                            const partialVal = partialChecked && (partialCheckedNum == childNum);
-                            const checkedVal = childNum > 0 ? partialChecked : (partialVal || check)
+                            const checkedVal = childNum > 0 ? partialChecked : check;
+                            const partialVal = childNum > 0 ? !(partialCheckedNum == childNum) && partialChecked : false;
                             this.checkbox[mod.key] = {
                                 checked: checkedVal ,
-                                partialChecked: partialChecked
+                                partialChecked: partialVal
                             }
                         }
                     });
