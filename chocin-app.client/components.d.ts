@@ -18,7 +18,9 @@ declare module 'vue' {
     IndexRouteView: typeof import('./src/components/IndexRouteView.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ListIcon: typeof import('./src/components/ListIcon.vue')['default']
+    Menu: typeof import('primevue/menu')['default']
     MultiSelect: typeof import('primevue/multiselect')['default']
+    PanelMenu: typeof import('primevue/panelmenu')['default']
     Password: typeof import('primevue/password')['default']
     Popover: typeof import('primevue/popover')['default']
     ProgressBar: typeof import('primevue/progressbar')['default']
@@ -32,5 +34,6 @@ declare module 'vue' {
   }
   export interface ComponentCustomProperties {
     StyleClass: typeof import('primevue/styleclass')['default']
+    Tooltip: typeof import('primevue/tooltip')['default']
   }
 }

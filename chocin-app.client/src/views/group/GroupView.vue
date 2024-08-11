@@ -17,9 +17,9 @@
             </Column>
             <Column :exportable="false" style="width: 20%">
                 <template #body="slotProps">
-                    <Button icon="pi pi-pencil" outlined rounded class="mr-2"
+                    <Button v-tooltip="'Edit'" icon="pi pi-pencil" outlined rounded class="mr-2"
                         @click="btnEdit(slotProps.data.groupId)" />
-                    <Button icon="pi pi-trash" outlined rounded severity="danger" @click="btnDelete(slotProps.data)" />
+                    <Button v-tooltip="'Delete'" icon="pi pi-trash" outlined rounded severity="danger" @click="btnDelete(slotProps.data)" />
                 </template>
             </Column>
         </DataTable>
