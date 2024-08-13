@@ -79,6 +79,7 @@ export const useAuthStore = defineStore('auth', {
         logout(redirect: boolean) {
             useAuthLocalStore().$reset();
             useAuthSessionStore().$reset();
+            useUiStore().$reset();
 
             if (redirect) {
                 router.push('/login');

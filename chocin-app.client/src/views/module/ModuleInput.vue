@@ -19,7 +19,7 @@
 
             <div class="flex flex-col gap-2 mb-3">
                 <label for="order">Ordering</label>
-                <InputText v-model="dataInput.order" id="order" type="number" required :disabled="progress" />
+                <InputNumber v-model="dataInput.order" id="order" type="number" required :disabled="progress" />
             </div>
 
             <div class="flex flex-col gap-2 mb-3">

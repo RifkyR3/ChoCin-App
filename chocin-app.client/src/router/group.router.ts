@@ -1,28 +1,29 @@
-import { type RouteRecordRaw } from 'vue-router';
-import * as views from '@/views';
-import IndexRouteView from '@components/IndexRouteView.vue';
+import { type RouteRecordRaw } from "vue-router";
+import IndexRouteView from "@components/IndexRouteView.vue";
+import GroupView from "@/views/group/GroupView.vue";
+import GroupInput from "@/views/group/GroupInput.vue";
 
-const mainUrl = '/groups';
+const mainUrl = "/groups";
 
 export const groupRoutes: Array<RouteRecordRaw> = [
-    {
-        path: mainUrl,
-        name: 'Groups',
-        component: IndexRouteView,
-        meta: {
-            requiresAuth: true
-        },
-        children: [
-            {
-                path: '',
-                name: 'Group List',
-                component: views.GroupView
-            },
-            {
-                path: 'input/:groupId?',
-                name: 'Group Input',
-                component: views.GroupInput
-            }
-        ]
-    }
-]
+  {
+    path: mainUrl,
+    name: "Groups",
+    component: IndexRouteView,
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: "",
+        name: "Group List",
+        component: GroupView,
+      },
+      {
+        path: "input/:groupId?",
+        name: "Group Input",
+        component: GroupInput,
+      },
+    ],
+  },
+];
