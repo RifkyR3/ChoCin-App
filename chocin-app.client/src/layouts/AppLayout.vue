@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue';
 import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
-import { useUiStore } from '@/stores';
+import { useUiStore } from '@/stores/ui.store';
 
 const { layoutConfig, layoutState, isSidebarActive, resetMenu } = useLayout();
 

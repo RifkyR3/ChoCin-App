@@ -1,4 +1,4 @@
-import { useUiStore } from '@/stores';
+import { useUiStore } from '@/stores/ui.store';
 import { computed, reactive, readonly } from 'vue';
 
 const layoutConfig = reactive({

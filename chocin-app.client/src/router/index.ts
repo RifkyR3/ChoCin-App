@@ -4,7 +4,7 @@ import {
   createMemoryHistory,
   type RouteRecordRaw,
 } from "vue-router";
-import { useAuthStore } from "@/stores";
+import { useAuthStore } from "@/stores/auth.store";
 
 import DashboardView from "@/views/DashboardView.vue";
 import LoginView from "@/views/LoginView.vue";

@@ -16,7 +16,7 @@ const layout = computed(
     () => `${currentRoute.value.meta.layout || defaultLayout}-layout`
 )
 
-import { useUiStore } from '@/stores';
+import { useUiStore } from '@/stores/ui.store';
 import { useLayout } from '@/layouts/composables/layout';
 
 const { toggleDarkMode, isDarkTheme } = useLayout();

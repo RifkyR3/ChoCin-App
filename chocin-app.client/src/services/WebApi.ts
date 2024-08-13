@@ -8,7 +8,8 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-import { useTokenStore, useUiStore } from "@/stores";
+import { useUiStore } from "@/stores/ui.store";
+import { useTokenStore } from "@/stores/token.store";
 export class ApiBase {
     private authToken: string = '';
     private setAuthTokenCall: boolean = false;

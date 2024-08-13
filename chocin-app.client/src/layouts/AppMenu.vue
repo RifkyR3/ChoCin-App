@@ -1,6 +1,6 @@
 <script setup>
 import AppMenuItem from './AppMenuItem.vue';
-import { useUiStore } from '@/stores';
+import { useUiStore } from '@/stores/ui.store';
 
 const model = useUiStore().menuItems;
 </script>
