@@ -145,10 +145,11 @@ namespace ChoCin_App.Server.Services
 
             if (module != null)
             {
-                if(module.Groups.Count > 0) {
+                if (module.Groups.Count > 0)
+                {
                     module.Groups.Clear();
                 }
-                
+
                 this.dbContext.CModules.Remove(module);
                 var result = await dbContext.SaveChangesAsync();
                 return result >= 0;

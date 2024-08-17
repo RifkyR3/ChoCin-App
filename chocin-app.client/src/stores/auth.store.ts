@@ -1,19 +1,17 @@
 import { defineStore } from "pinia";
-import { useAuthLocalStore } from "./auth.local.store";
-import { useAuthSessionStore } from "./auth.session.store";
-
 import router from "@/router";
 
 import type UserGroup from "@/commons/IUserGroup";
 import { AuthService, type JwtAuthResponse } from "@/services/WebApi";
 import { useUiStore } from "./ui.store";
-
-const authApi: AuthService = new AuthService();
+import { LoginExpireDay } from "@/commons/Const";
 
 export const useAuthStore = defineStore("auth", {
   actions: {
     async login(username: string, password: string, remember: boolean) {
       let result = false;
+
+      const authApi: AuthService = new AuthService();
 
       const response: JwtAuthResponse = await authApi.authenticate({
         userName: username,
@@ -23,53 +21,35 @@ export const useAuthStore = defineStore("auth", {
       if (response.token && response.id) {
         result = true;
 
+        let store;
         if (remember) {
-          const store = useAuthLocalStore();
-
-          store.authenticate = true;
-          store.isRemember = true;
-          store.token = response.token;
-          store.credential = {
-            userId: response.id,
-            userName: response.username,
-            fullName: response.fullName ? response.fullName : "",
-          };
-
-          const group: UserGroup[] = [];
-
-          response.groups?.forEach((element) => {
-            group.push({
-              groupId: element.groupId,
-              groupName: element.groupName,
-            });
-          });
-          store.userGroup = group;
+          store = useAuthLocalStore();
 
           const date = new Date();
-          date.setDate(date.getDate() + 1);
-          store.expire = date;
+          date.setDate(date.getDate() + LoginExpireDay);
+          store.expire = date.toString();
         } else {
-          const store = useAuthSessionStore();
-
-          store.authenticate = true;
-          store.isRemember = false;
-          store.token = response.token;
-          store.credential = {
-            userId: response.id,
-            userName: response.username,
-            fullName: response.fullName ? response.fullName : "",
-          };
-
-          const group: UserGroup[] = [];
-
-          response.groups?.forEach((element) => {
-            group.push({
-              groupId: element.groupId,
-              groupName: element.groupName,
-            });
-          });
-          store.userGroup = group;
+          store = useAuthSessionStore();
         }
+
+        store.authenticate = true;
+        store.isRemember = remember;
+        store.token = response.token;
+        store.credential = {
+          userId: response.id,
+          userName: response.username,
+          fullName: response.fullName ? response.fullName : "",
+        };
+
+        const group: UserGroup[] = [];
+
+        response.groups?.forEach((element) => {
+          group.push({
+            groupId: element.groupId,
+            groupName: element.groupName,
+          });
+        });
+        store.userGroup = group;
 
         await useUiStore().setMenuModule(this.getUserGroupLogin().groupId);
       }
@@ -122,7 +102,7 @@ export const useAuthStore = defineStore("auth", {
       if (storeSession.authenticate && storeSession.token != "") {
         return storeSession.userGroup[storeSession.userGroupSelected];
       } else {
-        return storeLocal.userGroup[storeSession.userGroupSelected];
+        return storeLocal.userGroup[storeLocal.userGroupSelected];
       }
     },
     setUserGroupLogin(key: number) {
@@ -132,8 +112,8 @@ export const useAuthStore = defineStore("auth", {
         storeSession.userGroupSelected = key;
         return storeSession.userGroup[storeSession.userGroupSelected];
       } else {
-        storeSession.userGroupSelected = key;
-        return storeLocal.userGroup[storeSession.userGroupSelected];
+        storeLocal.userGroupSelected = key;
+        return storeLocal.userGroup[storeLocal.userGroupSelected];
       }
     },
     getAuthenticate() {
@@ -158,5 +138,48 @@ export const useAuthStore = defineStore("auth", {
       const storeLocal = useAuthLocalStore();
       return storeLocal.expire;
     },
+  },
+});
+
+const useAuthLocalStore = defineStore("authLocal", {
+  state: () => {
+    return {
+      authenticate: false,
+      isRemember: false,
+      expire: "",
+      token: "",
+      credential: {
+        userId: "",
+        userName: "",
+        fullName: "",
+      },
+      userGroup: [] as UserGroup[] | [],
+      userGroupSelected: 0,
+      returnUrl: "",
+    };
+  },
+  persist: {
+    storage: localStorage,
+  },
+});
+
+const useAuthSessionStore = defineStore("authSession", {
+  state: () => {
+    return {
+      authenticate: false,
+      isRemember: false,
+      token: "",
+      credential: {
+        userId: "",
+        userName: "",
+        fullName: "",
+      },
+      userGroup: [] as UserGroup[] | [],
+      userGroupSelected: 0,
+      returnUrl: "",
+    };
+  },
+  persist: {
+    storage: sessionStorage,
   },
 });

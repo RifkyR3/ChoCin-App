@@ -1,6 +1,6 @@
 import {
   createRouter,
-  createWebHistory,
+  // createWebHistory,
   createMemoryHistory,
   type RouteRecordRaw,
 } from "vue-router";
@@ -68,7 +68,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createMemoryHistory(),
   routes,
 });
 

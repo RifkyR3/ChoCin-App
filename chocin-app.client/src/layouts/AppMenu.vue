@@ -1,8 +1,36 @@
-<script setup>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import AppMenuItem from './AppMenuItem.vue';
 import { useUiStore } from '@/stores/ui.store';
+import type { MenuItem } from 'primevue/menuitem';
+import { useAuthStore } from '@/stores/auth.store';
 
-const model = useUiStore().menuItems;
+interface Data {
+    model: MenuItem[]
+}
+
+export default defineComponent({
+    data(): Data {
+        return {
+            model: []
+        }
+    },
+    components: {
+        'app-menu-item': AppMenuItem
+    },
+    async mounted() {
+        await this.loadMenu();
+    },
+    methods: {
+        async loadMenu() {
+            if (useUiStore().menuItems.length <= 0) {
+                await useUiStore().setMenuModule(useAuthStore().getUserGroupLogin().groupId);
+            }
+
+            this.model = useUiStore().menuItems;
+        }
+    }
+})
 </script>
 
 <template>

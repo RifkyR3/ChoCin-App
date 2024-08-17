@@ -107,7 +107,7 @@ namespace ChoCin_App.Server.Services
         {
             var group = await this.dbContext
                 .CGroups
-                .Include (G => G.Modules)
+                .Include(G => G.Modules)
                 .Where(q => q.GroupId == id)
                 .FirstOrDefaultAsync();
 

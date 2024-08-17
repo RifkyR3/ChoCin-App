@@ -125,7 +125,8 @@ namespace ChoCin_App.Server.Services
 
             if (user != null)
             {
-                if(user.Groups?.Count > 0) {
+                if (user.Groups?.Count > 0)
+                {
                     user.Groups.Clear();
                 }
                 this.dbContext.CUsers.Remove(user);
