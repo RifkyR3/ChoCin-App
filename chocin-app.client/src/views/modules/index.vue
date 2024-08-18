@@ -3,22 +3,25 @@
         <Toolbar class="mb-6">
             <template #start>
                 <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" as="router-link"
-                    to="/groups/input/" />
+                    to="/modules/input/" />
             </template>
 
         </Toolbar>
 
         <DataTable :value="datas" stripedRows tableStyle="min-width: 50rem">
-            <Column field="groupName" header="Name"></Column>
-            <Column header="Module">
+            <Column field="name" header="Name"></Column>
+            <Column header="Icon">
                 <template #body="slotProps">
-                    {{ slotProps.data.groupModuleIds?.length }}
+                    <i v-if="slotProps.data.icon && slotProps.data.icon != ''" :class="slotProps.data.icon" class="pi pi-fw">&nbsp;</i>
+                    {{ slotProps.data.icon }}
                 </template>
             </Column>
+            <Column field="path" header="Path"></Column>
+            <Column field="order" header="Order"></Column>
             <Column :exportable="false" style="width: 20%">
                 <template #body="slotProps">
                     <Button v-tooltip="'Edit'" icon="pi pi-pencil" outlined rounded class="mr-2"
-                        @click="btnEdit(slotProps.data.groupId)" />
+                        @click="btnEdit(slotProps.data.id)" />
                     <Button v-tooltip="'Delete'" icon="pi pi-trash" outlined rounded severity="danger" @click="btnDelete(slotProps.data)" />
                 </template>
             </Column>
@@ -36,16 +39,19 @@
         </template>
     </Dialog>
 </template>
+<route lang="json">{
+    "name": "Module List"
+}</route>
 <script lang="ts">
 import { ToastLife } from '@/commons/Const';
-import { GroupService, type GroupModel } from '@/services/WebApi';
+import { ModuleService, type ModuleModel } from '@/services/WebApi';
 import { defineComponent } from 'vue';
 
-const api: GroupService = new GroupService();
+const api: ModuleService = new ModuleService();
 
 interface Data {
-    datas: GroupModel[],
-    data: GroupModel | null,
+    datas: ModuleModel[],
+    data: ModuleModel | null,
     deleteDialog: boolean,
     moduleName: string
 }
@@ -55,7 +61,7 @@ export default defineComponent({
             datas: [],
             data: null,
             deleteDialog: false,
-            moduleName: 'Group List'
+            moduleName: 'Module List'
         }
     },
     components: {
@@ -75,19 +81,19 @@ export default defineComponent({
     },
     methods: {
         async fetch() {
-            this.datas = await api.getListGroup();
+            this.datas = await api.getListModule();
         },
-        btnEdit(groupId: string) {
-            this.$router.push('/groups/input/' + groupId);
+        btnEdit(moduleId: string) {
+            this.$router.push('/modules/input/' + moduleId);
         },
-        btnDelete(data: GroupModel) {
+        btnDelete(data: ModuleModel) {
             this.data = data;
             this.deleteDialog = true;
         },
         async btnDeleteConfirm() {
             try {
                 if (this.data) {
-                    await api.deleteGroup(this.data.groupId);
+                    await api.deleteModule(this.data.id);
                 }
 
                 await this.fetch();
@@ -95,20 +101,19 @@ export default defineComponent({
                 this.$toast.add({
                     severity: 'success',
                     summary: this.moduleName,
-                    detail: 'Group Deleted',
+                    detail: 'Module Deleted',
                     life: ToastLife
                 });
             } catch(e) {
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
-                    detail: "Failed to Delete Group. This Group Already Used.",
+                    detail: "Failed to Delete Module. This Module Already Used.",
                     life: ToastLife
                 });
             }
 
             this.deleteDialog = false;
-            
         }
     },
 })

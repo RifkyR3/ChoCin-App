@@ -18,6 +18,9 @@
         </form>
     </div>
 </template>
+<route lang="json">{
+    "name": "Group Input"
+}</route>
 <script lang="ts">
 import { ToastLife } from '@/commons/Const';
 import type { GroupInput, GroupModel } from '@/services/WebApi';
@@ -25,6 +28,7 @@ import { GroupService, ModuleService } from '@/services/WebApi';
 import type { TreeExpandedKeys } from 'primevue/tree';
 import type { TreeNode } from 'primevue/treenode';
 import { defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
 
 const groupApi: GroupService = new GroupService();
 const moduleApi: ModuleService = new ModuleService();
@@ -59,13 +63,14 @@ export default defineComponent({
     components: {
     },
     async mounted() {
-        if (this.$route.name) {
-            this.moduleName = this.$route.name.toString();
+        const route = useRoute("Group Input");
+        if (route.name) {
+            this.moduleName = route.name.toString();
         }
 
         await this.getModuleTree();
 
-        const groupId = this.$route.params.groupId;
+        const groupId = route.params.groupId;
         if (groupId) {
             this.dataId = groupId.toString();
             await this.getGroupById(this.dataId);

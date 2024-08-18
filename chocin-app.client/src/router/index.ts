@@ -2,75 +2,19 @@ import {
   createRouter,
   // createWebHistory,
   createMemoryHistory,
-  type RouteRecordRaw,
+  // type RouteRecordRaw,
 } from "vue-router";
+import { routes, handleHotUpdate } from "vue-router/auto-routes";
 import { useAuthStore } from "@/stores/auth.store";
-
-import DashboardView from "@/views/DashboardView.vue";
-import LoginView from "@/views/LoginView.vue";
-import AccessView from "@/views/AccessView.vue";
-import ErrorView from "@/views/ErrorView.vue";
-
-import { userRoutes } from "./user.router";
-import { groupRoutes } from "./group.router";
-import { moduleRoutes } from "./module.router";
-
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: "/",
-    name: "Dashboard",
-    component: DashboardView,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: LoginView,
-    meta: {
-      requiresUnauth: true,
-      layout: "empty",
-    },
-  },
-
-  ...userRoutes,
-  ...groupRoutes,
-  ...moduleRoutes,
-
-  {
-    path: "/denied",
-    name: "Denied",
-    component: AccessView,
-    meta: {
-      requiresAuth: true,
-      layout: "empty",
-    },
-  },
-  {
-    path: "/error",
-    name: "Error",
-    component: ErrorView,
-    meta: {
-      requiresAuth: true,
-      layout: "empty",
-    },
-  },
-  // otherwise redirect to error
-  {
-    path: "/:pathMatch(.*)*",
-    component: ErrorView,
-    meta: {
-      requiresAuth: true,
-      layout: "empty",
-    },
-  },
-];
 
 const router = createRouter({
   history: createMemoryHistory(),
   routes,
 });
+
+if (import.meta.hot) {
+  handleHotUpdate(router);
+}
 
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore();

@@ -1,25 +1,32 @@
 <template>
     <div class="card">
         <form @submit.prevent="onSubmit">
+
             <div class="flex flex-col gap-2 mb-3">
                 <label for="name1">Name</label>
                 <InputText v-model="dataInput.name" id="name1" type="text" required :disabled="progress" />
             </div>
 
             <div class="flex flex-col gap-2 mb-3">
-                <label for="username1">Username</label>
-                <InputText v-model="dataInput.userName" id="username1" type="text" required :disabled="progress" />
+                <label for="path1">Path</label>
+                <InputText v-model="dataInput.path" id="path1" type="text" :disabled="progress" />
             </div>
 
             <div class="flex flex-col gap-2 mb-3">
-                <label for="password1">Password</label>
-                <InputText v-model="dataInput.password" id="password1" type="password" required :disabled="progress" />
+                <label for="icon1">Icon</label>
+                <InputText v-model="dataInput.icon" id="icon1" type="text" :disabled="progress" />
             </div>
 
             <div class="flex flex-col gap-2 mb-3">
-                <label for="module">Groups</label>
-                <MultiSelect v-model="dataInput.groupIds" display="chip" :options="groupSelect" optionLabel="name"
-                    optionValue="value" filter placeholder="Select Groups" class="w-full" :disabled="progress" />
+                <label for="order">Ordering</label>
+                <InputNumber v-model="dataInput.order" id="order" type="number" required :disabled="progress" />
+            </div>
+
+            <div class="flex flex-col gap-2 mb-3">
+                <label for="module">Main Module</label>
+                <Select v-model="dataInput.subModuleId" :options="moduleSelect" filter optionLabel="name" optionValue="value"
+                    placeholder="Select a Main Module" class="w-full" :disabled="progress">
+                </Select>
             </div>
 
             <Button type="submit" label="Submit" :fluid="false" icon="pi pi-check"></Button>
@@ -27,58 +34,66 @@
             <Button label="Cancel" :fluid="false" severity="danger" icon="pi pi-times" v-on:click="btnBack"></Button>
         </form>
     </div>
+    <list-icon></list-icon>
 </template>
+<route lang="json">{
+    "name": "Module Input"
+}</route>
 <script lang="ts">
 import { ToastLife } from '@/commons/Const';
-import type { UserInput, UserModel, DropDownModel } from '@/services/WebApi';
-import { GroupService, UserService } from '@/services/WebApi';
+import type { ModuleInput, ModuleModel, DropDownModel } from '@/services/WebApi';
+import { ModuleService } from '@/services/WebApi';
 import { defineComponent } from 'vue';
+import ListIcon from '@/components/ListIcon.vue';
+import { useRoute } from 'vue-router';
 
-const groupApi: GroupService = new GroupService();
-const userApi: UserService = new UserService();
+const moduleApi: ModuleService = new ModuleService();
 
 interface Data {
     moduleName: string,
     moduleUrl: string,
-    data: UserModel | null,
+    data: ModuleModel | null,
     dataId: string | null,
-    dataInput: UserInput,
+    dataInput: ModuleInput,
     inputResult: boolean,
     progress: boolean,
-    groupSelect: DropDownModel[]
+    moduleSelect: DropDownModel[]
 }
 
 export default defineComponent({
     data(): Data {
         return {
             moduleName: '',
-            moduleUrl: '/users',
+            moduleUrl: '/modules',
             data: null,
             dataId: null,
             dataInput: {
                 name: '',
-                userName: '',
-                password: '',
-                groupIds: []
+                icon: '',
+                path: '',
+                order: 0,
+                subModuleId: undefined
             },
             inputResult: false,
             progress: false,
-            groupSelect: []
+            moduleSelect: []
         }
     },
     components: {
+        ListIcon,
     },
     async mounted() {
-        if (this.$route.name) {
-            this.moduleName = this.$route.name.toString();
+        const route = useRoute("Module Input");
+        if (route.name) {
+            this.moduleName = route.name.toString();
         }
 
-        await this.getGroupDropDown();
+        await this.getComboMainModule();
 
-        const userId = this.$route.params.userId;
-        if (userId) {
-            this.dataId = userId.toString();
-            await this.getUserById(this.dataId);
+        const moduleId = route.params.moduleId;
+        if (moduleId) {
+            this.dataId = moduleId.toString();
+            await this.fetch(this.dataId);
         }
     },
     methods: {
@@ -98,12 +113,12 @@ export default defineComponent({
         },
         async doAdd() {
             try {
-                await userApi.addUser(this.dataInput);
+                await moduleApi.addModule(this.dataInput);
 
                 this.$toast.add({
                     severity: "success",
                     summary: this.moduleName,
-                    detail: "Successfully to add User",
+                    detail: "Successfully to add Module",
                     life: ToastLife
                 });
                 this.inputResult = true;
@@ -111,7 +126,7 @@ export default defineComponent({
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
-                    detail: "Failed to add User",
+                    detail: "Failed to add Module",
                     life: ToastLife
                 });
                 this.inputResult = false;
@@ -119,12 +134,12 @@ export default defineComponent({
         },
         async doUpdate(dataId: string) {
             try {
-                await userApi.updateUser(dataId, this.dataInput);
+                await moduleApi.updateModule(dataId, this.dataInput);
 
                 this.$toast.add({
                     severity: "success",
                     summary: this.moduleName,
-                    detail: "Successfully to update User",
+                    detail: "Successfully to update Module",
                     life: ToastLife
                 });
                 this.inputResult = true;
@@ -133,21 +148,22 @@ export default defineComponent({
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
-                    detail: "Failed to update User",
+                    detail: "Failed to update Module",
                     life: ToastLife
                 });
                 this.inputResult = false;
             }
         },
-        async getUserById(id: string) {
+        async fetch(id:string) {
             try {
-                this.data = await userApi.getUserById(id);
+                this.data = await moduleApi.getModuleById(id);
 
                 this.dataInput = {
-                    name: this.data.userFullName || '',
-                    userName: this.data.userName,
-                    password: '',
-                    groupIds: this.data.groups?.map(e => e.groupId)
+                    name: this.data.name,
+                    icon: this.data.icon,
+                    path: this.data.path,
+                    order: this.data.order,
+                    subModuleId: this.data.subId,
                 }
 
             } catch (e) {
@@ -155,12 +171,12 @@ export default defineComponent({
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
-                    detail: "Failed to get Group data"
+                    detail: "Failed to get Module data"
                 });
             }
         },
-        async getGroupDropDown() {
-            this.groupSelect = await groupApi.getComboGroup();
+        async getComboMainModule() {
+            this.moduleSelect = await moduleApi.getComboMainModule();
         }
     },
 })

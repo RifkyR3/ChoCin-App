@@ -40,8 +40,7 @@
                                 class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
                             <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true"
                                 class="w-full mb-4" inputClass="w-full" :inputStyle="{ padding: '1rem' }" required
-                                :disabled="isSubmit">
-                            </Password>
+                                :disabled="isSubmit" />
 
                             <div class="flex items-center justify-between mb-8 gap-8">
                                 <div class="flex items-center">
@@ -61,9 +60,19 @@
         </div>
     </div>
 </template>
+<route lang="json">{
+    "name": "Login",
+    "meta": {
+        "requiresUnauth": true,
+        "layout": "empty"
+    }
+}</route>
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAuthStore } from '@/stores/auth.store';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 interface Data {
     username: string,
@@ -81,7 +90,7 @@ export default defineComponent({
             isSubmit: false
         }
     },
-    components:{
+    components: {
     },
     methods: {
         async onSubmit() {
@@ -96,7 +105,7 @@ export default defineComponent({
                 )
 
                 if (res) {
-                    await this.$router.push('/');
+                    await router.push('/');
 
                 } else {
                     this.$toast.add({

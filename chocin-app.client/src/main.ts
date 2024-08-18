@@ -13,8 +13,8 @@ import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
 
 // Component
-import DefaultLayout from '@layouts/DefaultLayout.vue';
-import EmptyLayout from '@layouts/EmptyLayout.vue';
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
+import EmptyLayout from '@/layouts/EmptyLayout.vue';
 
 const app = createApp(App);
 

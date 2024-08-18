@@ -3,25 +3,23 @@
         <Toolbar class="mb-6">
             <template #start>
                 <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" as="router-link"
-                    to="/modules/input/" />
+                    to="/users/input/" />
             </template>
 
         </Toolbar>
 
         <DataTable :value="datas" stripedRows tableStyle="min-width: 50rem">
-            <Column field="name" header="Name"></Column>
-            <Column header="Icon">
+            <Column field="userFullName" header="Name"></Column>
+            <Column field="userName" header="Username"></Column>
+            <Column header="Groups">
                 <template #body="slotProps">
-                    <i v-if="slotProps.data.icon && slotProps.data.icon != ''" :class="slotProps.data.icon" class="pi pi-fw">&nbsp;</i>
-                    {{ slotProps.data.icon }}
+                    {{ parseGroupName(slotProps.data.groups) }}
                 </template>
             </Column>
-            <Column field="path" header="Path"></Column>
-            <Column field="order" header="Order"></Column>
             <Column :exportable="false" style="width: 20%">
                 <template #body="slotProps">
                     <Button v-tooltip="'Edit'" icon="pi pi-pencil" outlined rounded class="mr-2"
-                        @click="btnEdit(slotProps.data.id)" />
+                        @click="btnEdit(slotProps.data.userId)" />
                     <Button v-tooltip="'Delete'" icon="pi pi-trash" outlined rounded severity="danger" @click="btnDelete(slotProps.data)" />
                 </template>
             </Column>
@@ -39,16 +37,19 @@
         </template>
     </Dialog>
 </template>
+<route lang="json">{
+    "name": "User List"
+}</route>
 <script lang="ts">
 import { ToastLife } from '@/commons/Const';
-import { ModuleService, type ModuleModel } from '@/services/WebApi';
+import { UserService, type UserModel, type GroupModel } from '@/services/WebApi';
 import { defineComponent } from 'vue';
 
-const api: ModuleService = new ModuleService();
+const api: UserService = new UserService();
 
 interface Data {
-    datas: ModuleModel[],
-    data: ModuleModel | null,
+    datas: UserModel[],
+    data: UserModel | null,
     deleteDialog: boolean,
     moduleName: string
 }
@@ -58,7 +59,7 @@ export default defineComponent({
             datas: [],
             data: null,
             deleteDialog: false,
-            moduleName: 'Module List'
+            moduleName: 'User List'
         }
     },
     components: {
@@ -78,19 +79,19 @@ export default defineComponent({
     },
     methods: {
         async fetch() {
-            this.datas = await api.getListModule();
+            this.datas = await api.getListUser();
         },
-        btnEdit(moduleId: string) {
-            this.$router.push('/modules/input/' + moduleId);
+        btnEdit(userId: string) {
+            this.$router.push('/users/input/' + userId);
         },
-        btnDelete(data: ModuleModel) {
+        btnDelete(data: UserModel) {
             this.data = data;
             this.deleteDialog = true;
         },
         async btnDeleteConfirm() {
             try {
                 if (this.data) {
-                    await api.deleteModule(this.data.id);
+                    await api.deleteUser(this.data.userId);
                 }
 
                 await this.fetch();
@@ -98,19 +99,22 @@ export default defineComponent({
                 this.$toast.add({
                     severity: 'success',
                     summary: this.moduleName,
-                    detail: 'Module Deleted',
+                    detail: 'User Deleted',
                     life: ToastLife
                 });
             } catch(e) {
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
-                    detail: "Failed to Delete Module. This Module Already Used.",
+                    detail: "Failed to Delete User. This User Already Used.",
                     life: ToastLife
                 });
             }
 
             this.deleteDialog = false;
+        },
+        parseGroupName(groups?:GroupModel[]) {
+            return groups?.map(e => e.groupName).join(', ');
         }
     },
 })

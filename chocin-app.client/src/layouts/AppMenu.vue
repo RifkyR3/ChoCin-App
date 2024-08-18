@@ -24,7 +24,10 @@ export default defineComponent({
     methods: {
         async loadMenu() {
             if (useUiStore().menuItems.length <= 0) {
-                await useUiStore().setMenuModule(useAuthStore().getUserGroupLogin().groupId);
+                const groupLogin = useAuthStore().getUserGroupLogin();
+                if(groupLogin) {
+                    await useUiStore().setMenuModule(groupLogin.groupId);
+                }
             }
 
             this.model = useUiStore().menuItems;

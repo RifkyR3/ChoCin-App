@@ -3,23 +3,22 @@
         <Toolbar class="mb-6">
             <template #start>
                 <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" as="router-link"
-                    to="/users/input/" />
+                    to="/groups/input/" />
             </template>
 
         </Toolbar>
 
         <DataTable :value="datas" stripedRows tableStyle="min-width: 50rem">
-            <Column field="userFullName" header="Name"></Column>
-            <Column field="userName" header="Username"></Column>
-            <Column header="Groups">
+            <Column field="groupName" header="Name"></Column>
+            <Column header="Module">
                 <template #body="slotProps">
-                    {{ parseGroupName(slotProps.data.groups) }}
+                    {{ slotProps.data.groupModuleIds?.length }}
                 </template>
             </Column>
             <Column :exportable="false" style="width: 20%">
                 <template #body="slotProps">
                     <Button v-tooltip="'Edit'" icon="pi pi-pencil" outlined rounded class="mr-2"
-                        @click="btnEdit(slotProps.data.userId)" />
+                        @click="btnEdit(slotProps.data.groupId)" />
                     <Button v-tooltip="'Delete'" icon="pi pi-trash" outlined rounded severity="danger" @click="btnDelete(slotProps.data)" />
                 </template>
             </Column>
@@ -37,16 +36,19 @@
         </template>
     </Dialog>
 </template>
+<route lang="json">{
+    "name": "Group List"
+}</route>
 <script lang="ts">
 import { ToastLife } from '@/commons/Const';
-import { UserService, type UserModel, type GroupModel } from '@/services/WebApi';
+import { GroupService, type GroupModel } from '@/services/WebApi';
 import { defineComponent } from 'vue';
 
-const api: UserService = new UserService();
+const api: GroupService = new GroupService();
 
 interface Data {
-    datas: UserModel[],
-    data: UserModel | null,
+    datas: GroupModel[],
+    data: GroupModel | null,
     deleteDialog: boolean,
     moduleName: string
 }
@@ -56,7 +58,7 @@ export default defineComponent({
             datas: [],
             data: null,
             deleteDialog: false,
-            moduleName: 'User List'
+            moduleName: 'Group List'
         }
     },
     components: {
@@ -76,19 +78,19 @@ export default defineComponent({
     },
     methods: {
         async fetch() {
-            this.datas = await api.getListUser();
+            this.datas = await api.getListGroup();
         },
-        btnEdit(userId: string) {
-            this.$router.push('/users/input/' + userId);
+        btnEdit(groupId: string) {
+            this.$router.push('/groups/input/' + groupId);
         },
-        btnDelete(data: UserModel) {
+        btnDelete(data: GroupModel) {
             this.data = data;
             this.deleteDialog = true;
         },
         async btnDeleteConfirm() {
             try {
                 if (this.data) {
-                    await api.deleteUser(this.data.userId);
+                    await api.deleteGroup(this.data.groupId);
                 }
 
                 await this.fetch();
@@ -96,22 +98,20 @@ export default defineComponent({
                 this.$toast.add({
                     severity: 'success',
                     summary: this.moduleName,
-                    detail: 'User Deleted',
+                    detail: 'Group Deleted',
                     life: ToastLife
                 });
             } catch(e) {
                 this.$toast.add({
                     severity: "warn",
                     summary: this.moduleName,
-                    detail: "Failed to Delete User. This User Already Used.",
+                    detail: "Failed to Delete Group. This Group Already Used.",
                     life: ToastLife
                 });
             }
 
             this.deleteDialog = false;
-        },
-        parseGroupName(groups?:GroupModel[]) {
-            return groups?.map(e => e.groupName).join(', ');
+            
         }
     },
 })
