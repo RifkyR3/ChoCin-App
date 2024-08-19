@@ -70,9 +70,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAuthStore } from '@/stores/auth.store';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 interface Data {
     username: string,
@@ -105,7 +102,7 @@ export default defineComponent({
                 )
 
                 if (res) {
-                    await router.push('/');
+                    await this.$router.push('/');
 
                 } else {
                     this.$toast.add({

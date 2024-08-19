@@ -21,7 +21,6 @@ declare global {
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
   const markRaw: typeof import('vue')['markRaw']
-  const message: typeof import('primevue/message')['message']
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
@@ -38,7 +37,6 @@ declare global {
   const onServerPrefetch: typeof import('vue')['onServerPrefetch']
   const onUnmounted: typeof import('vue')['onUnmounted']
   const onUpdated: typeof import('vue')['onUpdated']
-  const password: typeof import('primevue/password')['password']
   const provide: typeof import('vue')['provide']
   const reactive: typeof import('vue')['reactive']
   const readonly: typeof import('vue')['readonly']
@@ -54,15 +52,14 @@ declare global {
   const triggerRef: typeof import('vue')['triggerRef']
   const unref: typeof import('vue')['unref']
   const useAttrs: typeof import('vue')['useAttrs']
-  const useAuthStore: typeof import('./src/stores/auth.store')['useAuthStore']
+  const useAuthStore: typeof import('./stores/auth.store')['useAuthStore']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
-  const useLink: typeof import('vue-router/auto')['useLink']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
-  const useTokenStore: typeof import('./src/stores/token.store')['useTokenStore']
-  const useUiStore: typeof import('./src/stores/ui.store')['useUiStore']
+  const useTokenStore: typeof import('./stores/token.store')['useTokenStore']
+  const useUiStore: typeof import('./stores/ui.store')['useUiStore']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -126,14 +123,14 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
-    readonly useAuthStore: UnwrapRef<typeof import('./src/stores/auth.store')['useAuthStore']>
+    readonly useAuthStore: UnwrapRef<typeof import('./stores/auth.store')['useAuthStore']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
-    readonly useTokenStore: UnwrapRef<typeof import('./src/stores/token.store')['useTokenStore']>
-    readonly useUiStore: UnwrapRef<typeof import('./src/stores/ui.store')['useUiStore']>
+    readonly useTokenStore: UnwrapRef<typeof import('./stores/token.store')['useTokenStore']>
+    readonly useUiStore: UnwrapRef<typeof import('./stores/ui.store')['useUiStore']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

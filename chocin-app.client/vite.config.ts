@@ -63,17 +63,15 @@ export default defineConfig({
           src: "src/views",
         },
       ],
+      dts: 'src/typed-router.d.ts',
     }),
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
-      imports: [
-        "vue",
-        VueRouterAutoImports,
-      ],
+      imports: ["vue", VueRouterAutoImports],
       vueTemplate: true,
-      resolvers: [
-      ],
+      resolvers: [],
       dirs: ["src/stores"],
+      dts: 'src/auto-imports.d.ts',
     }),
     // https://github.com/antfu/unplugin-vue-components
     Components({
@@ -81,6 +79,7 @@ export default defineConfig({
         // https://github.com/primefaces/primevue
         PrimeVueResolver(),
       ],
+      dts: 'src/components.d.ts',
     }),
     vue(),
     // https://github.com/webfansplz/vite-plugin-vue-devtools
@@ -88,7 +87,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url))
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
   server: {
