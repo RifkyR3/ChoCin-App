@@ -63,15 +63,25 @@ export default defineConfig({
           src: "src/views",
         },
       ],
-      dts: 'src/typed-router.d.ts',
+      dts: "src/typed-router.d.ts",
     }),
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
+      eslintrc: {
+        enabled: true,
+      },
       imports: ["vue", VueRouterAutoImports],
       vueTemplate: true,
       resolvers: [],
       dirs: ["src/stores"],
-      dts: 'src/auto-imports.d.ts',
+      dts: "src/auto-imports.d.ts",
+
+      // Include auto-imported packages in Vite's `optimizeDeps` options
+      // Recommend to enable
+      viteOptimizeDeps: true,
+
+      // Inject the imports at the end of other imports
+      injectAtEnd: true,
     }),
     // https://github.com/antfu/unplugin-vue-components
     Components({
@@ -79,7 +89,7 @@ export default defineConfig({
         // https://github.com/primefaces/primevue
         PrimeVueResolver(),
       ],
-      dts: 'src/components.d.ts',
+      dts: "src/components.d.ts",
     }),
     vue(),
     // https://github.com/webfansplz/vite-plugin-vue-devtools
