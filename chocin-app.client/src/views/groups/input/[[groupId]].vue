@@ -205,7 +205,7 @@ export default defineComponent({
                         _child.push({
                             key: child.id,
                             label: child.name,
-                            icon: module.icon
+                            icon: 'pi ' + child.icon
                         });
                     });
                 }
@@ -213,7 +213,7 @@ export default defineComponent({
                 this.moduleTree.push({
                     key: module.id,
                     label: module.name,
-                    icon: module.icon,
+                    icon: 'pi ' + module.icon,
                     children: _child
                 });
             });

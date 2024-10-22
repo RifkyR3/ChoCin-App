@@ -1,11 +1,11 @@
 <script setup>
-import { useLayout } from '@/layouts/composables/layout';
-import { onBeforeMount, ref, watch } from 'vue';
+import { ref, onBeforeMount, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useLayout } from '@/layouts/composables/layout';
 
 const route = useRoute();
 
-const { layoutState, setActiveMenuItem, onMenuToggle } = useLayout();
+const { layoutConfig, layoutState, setActiveMenuItem, onMenuToggle } = useLayout();
 
 const props = defineProps({
     item: {
@@ -38,19 +38,20 @@ onBeforeMount(() => {
 });
 
 watch(
-    () => layoutState.activeMenuItem,
+    () => layoutConfig.activeMenuItem.value,
     (newVal) => {
         isActiveMenu.value = newVal === itemKey.value || newVal.startsWith(itemKey.value + '-');
     }
 );
-
-function itemClick(event, item) {
+const itemClick = (event, item) => {
     if (item.disabled) {
         event.preventDefault();
         return;
     }
 
-    if ((item.to || item.url) && (layoutState.staticMenuMobileActive || layoutState.overlayMenuActive)) {
+    const { overlayMenuActive, staticMenuMobileActive } = layoutState;
+
+    if ((item.to || item.url) && (staticMenuMobileActive.value || overlayMenuActive.value)) {
         onMenuToggle();
     }
 
@@ -61,11 +62,11 @@ function itemClick(event, item) {
     const foundItemKey = item.items ? (isActiveMenu.value ? props.parentItemKey : itemKey) : itemKey.value;
 
     setActiveMenuItem(foundItemKey);
-}
+};
 
-function checkActiveRoute(item) {
+const checkActiveRoute = (item) => {
     return route.path === item.to;
-}
+};
 </script>
 
 <template>

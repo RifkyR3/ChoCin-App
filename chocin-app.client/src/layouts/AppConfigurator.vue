@@ -1,24 +1,20 @@
 <script setup>
-import { useLayout } from '@/layouts/composables/layout';
+import { ref, computed } from 'vue';
 import { $t, updatePreset, updateSurfacePalette } from '@primevue/themes';
+import { useLayout } from '@/layouts/composables/layout';
 import Aura from '@primevue/themes/aura';
 import Lara from '@primevue/themes/lara';
-import { ref } from 'vue';
+import Nora from '@primevue/themes/nora';
 
-const { layoutConfig, setPrimary, setSurface, setPreset, isDarkTheme, setMenuMode } = useLayout();
+const { layoutConfig, setPrimary, setSurface, setPreset, isDarkTheme } = useLayout();
 
 const presets = {
     Aura,
-    Lara
+    Lara,
+    Nora
 };
-const preset = ref(layoutConfig.preset);
-const presetOptions = ref(Object.keys(presets));
 
-const menuMode = ref(layoutConfig.menuMode);
-const menuModeOptions = ref([
-    { label: 'Static', value: 'static' },
-    { label: 'Overlay', value: 'overlay' }
-]);
+const presetOptions = ref(Object.keys(presets));
 
 const primaryColors = ref([
     { name: 'noir', palette: {} },
@@ -76,7 +72,7 @@ const surfaces = ref([
 ]);
 
 function getPresetExt() {
-    const color = primaryColors.value.find((c) => c.name === layoutConfig.primary);
+    const color = primaryColors.value.find((c) => c.name === layoutConfig.primary.value);
 
     if (color.name === 'noir') {
         return {
@@ -127,41 +123,79 @@ function getPresetExt() {
             }
         };
     } else {
-        return {
-            semantic: {
-                primary: color.palette,
-                colorScheme: {
-                    light: {
-                        primary: {
-                            color: '{primary.500}',
-                            contrastColor: '#ffffff',
-                            hoverColor: '{primary.600}',
-                            activeColor: '{primary.700}'
+        if (layoutConfig.preset === 'Nora') {
+            return {
+                semantic: {
+                    primary: color.palette,
+                    colorScheme: {
+                        light: {
+                            primary: {
+                                color: '{primary.600}',
+                                contrastColor: '#ffffff',
+                                hoverColor: '{primary.700}',
+                                activeColor: '{primary.800}'
+                            },
+                            highlight: {
+                                background: '{primary.600}',
+                                focusBackground: '{primary.700}',
+                                color: '#ffffff',
+                                focusColor: '#ffffff'
+                            }
                         },
-                        highlight: {
-                            background: '{primary.50}',
-                            focusBackground: '{primary.100}',
-                            color: '{primary.700}',
-                            focusColor: '{primary.800}'
-                        }
-                    },
-                    dark: {
-                        primary: {
-                            color: '{primary.400}',
-                            contrastColor: '{surface.900}',
-                            hoverColor: '{primary.300}',
-                            activeColor: '{primary.200}'
-                        },
-                        highlight: {
-                            background: 'color-mix(in srgb, {primary.400}, transparent 84%)',
-                            focusBackground: 'color-mix(in srgb, {primary.400}, transparent 76%)',
-                            color: 'rgba(255,255,255,.87)',
-                            focusColor: 'rgba(255,255,255,.87)'
+                        dark: {
+                            primary: {
+                                color: '{primary.500}',
+                                contrastColor: '{surface.900}',
+                                hoverColor: '{primary.400}',
+                                activeColor: '{primary.300}'
+                            },
+                            highlight: {
+                                background: '{primary.500}',
+                                focusBackground: '{primary.400}',
+                                color: '{surface.900}',
+                                focusColor: '{surface.900}'
+                            }
                         }
                     }
                 }
-            }
-        };
+            };
+        } else {
+            return {
+                semantic: {
+                    primary: color.palette,
+                    colorScheme: {
+                        light: {
+                            primary: {
+                                color: '{primary.500}',
+                                contrastColor: '#ffffff',
+                                hoverColor: '{primary.600}',
+                                activeColor: '{primary.700}'
+                            },
+                            highlight: {
+                                background: '{primary.50}',
+                                focusBackground: '{primary.100}',
+                                color: '{primary.700}',
+                                focusColor: '{primary.800}'
+                            }
+                        },
+                        dark: {
+                            primary: {
+                                color: '{primary.400}',
+                                contrastColor: '{surface.900}',
+                                hoverColor: '{primary.300}',
+                                activeColor: '{primary.200}'
+                            },
+                            highlight: {
+                                background: 'color-mix(in srgb, {primary.400}, transparent 84%)',
+                                focusBackground: 'color-mix(in srgb, {primary.400}, transparent 76%)',
+                                color: 'rgba(255,255,255,.87)',
+                                focusColor: 'rgba(255,255,255,.87)'
+                            }
+                        }
+                    }
+                }
+            };
+        }
     }
 }
 
@@ -181,64 +215,56 @@ function applyTheme(type, color) {
     } else if (type === 'surface') {
         updateSurfacePalette(color.palette);
     }
+
+    /*EventBus.emit('theme-palette-change');*/
 }
 
-function onPresetChange() {
-    setPreset(preset.value);
-    const presetValue = presets[preset.value];
-    const surfacePalette = surfaces.value.find((s) => s.name === layoutConfig.surface)?.palette;
+function onPresetChange(value) {
+    setPreset(value);
+    const presetValue = presets[value];
+    const surfacePalette = surfaces.value.find((s) => s.name === selectedSurfaceColor.value)?.palette;
 
     $t().preset(presetValue).preset(getPresetExt()).surfacePalette(surfacePalette).use({ useDefaultOptions: true });
 }
 
-function onMenuModeChange() {
-    setMenuMode(menuMode.value);
-}
+const selectedPrimaryColor = computed(() => {
+    return layoutConfig.primary.value;
+});
+
+const selectedSurfaceColor = computed(() => {
+    return layoutConfig.surface.value;
+});
+
+const preset = computed(() => {
+    return layoutConfig.preset.value;
+});
 </script>
 
 <template>
-    <div
-        class="config-panel hidden absolute top-[3.25rem] right-0 w-64 p-4 bg-surface-0 dark:bg-surface-900 border border-surface rounded-border origin-top shadow-[0px_3px_5px_rgba(0,0,0,0.02),0px_0px_2px_rgba(0,0,0,0.05),0px_1px_4px_rgba(0,0,0,0.08)]"
-    >
-        <div class="flex flex-col gap-4">
-            <div>
-                <span class="text-sm text-muted-color font-semibold">Primary</span>
-                <div class="pt-2 flex gap-2 flex-wrap justify-between">
-                    <button
-                        v-for="primaryColor of primaryColors"
-                        :key="primaryColor.name"
-                        type="button"
-                        :title="primaryColor.name"
-                        @click="updateColors('primary', primaryColor)"
-                        :class="['border-none w-5 h-5 rounded-full p-0 cursor-pointer outline-none outline-offset-1', { 'outline-primary': layoutConfig.primary === primaryColor.name }]"
-                        :style="{ backgroundColor: `${primaryColor.name === 'noir' ? 'var(--text-color)' : primaryColor.palette['500']}` }"
-                    ></button>
+    <div class="config-panel hidden">
+        <div class="config-panel-content">
+            <div class="config-panel-colors">
+                <span class="config-panel-label">Primary</span>
+                <div>
+                    <button v-for="primaryColor of primaryColors" :key="primaryColor.name" type="button"
+                        :title="primaryColor.name" @click="updateColors('primary', primaryColor)"
+                        :class="{ 'active-color': selectedPrimaryColor === primaryColor.name }"
+                        :style="{ backgroundColor: `${primaryColor.name === 'noir' ? 'var(--text-color)' : primaryColor.palette['500']}` }"></button>
                 </div>
             </div>
-            <div>
-                <span class="text-sm text-muted-color font-semibold">Surface</span>
-                <div class="pt-2 flex gap-2 flex-wrap justify-between">
-                    <button
-                        v-for="surface of surfaces"
-                        :key="surface.name"
-                        type="button"
-                        :title="surface.name"
+            <div class="config-panel-colors">
+                <span class="config-panel-label">Surface</span>
+                <div>
+                    <button v-for="surface of surfaces" :key="surface.name" type="button" :title="surface.name"
                         @click="updateColors('surface', surface)"
-                        :class="[
-                            'border-none w-5 h-5 rounded-full p-0 cursor-pointer outline-none outline-offset-1',
-                            { 'outline-primary': layoutConfig.surface ? layoutConfig.surface === surface.name : isDarkTheme ? surface.name === 'zinc' : surface.name === 'slate' }
-                        ]"
-                        :style="{ backgroundColor: `${surface.palette['500']}` }"
-                    ></button>
+                        :class="{ 'active-color': selectedSurfaceColor ? selectedSurfaceColor === surface.name : isDarkTheme ? surface.name === 'zinc' : surface.name === 'slate' }"
+                        :style="{ backgroundColor: `${surface.palette['500']}` }"></button>
                 </div>
             </div>
-            <div class="flex flex-col gap-2">
-                <span class="text-sm text-muted-color font-semibold">Presets</span>
-                <SelectButton v-model="preset" @change="onPresetChange" :options="presetOptions" :allowEmpty="false" />
-            </div>
-            <div class="flex flex-col gap-2">
-                <span class="text-sm text-muted-color font-semibold">Menu Mode</span>
-                <SelectButton v-model="menuMode" @change="onMenuModeChange" :options="menuModeOptions" :allowEmpty="false" optionLabel="label" optionValue="value" />
+            <div class="config-panel-settings">
+                <span class="config-panel-label">Presets</span>
+                <SelectButton v-model="preset" @update:modelValue="onPresetChange" :options="presetOptions"
+                    :allowEmpty="false" />
             </div>
         </div>
     </div>
